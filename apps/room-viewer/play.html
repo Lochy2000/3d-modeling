@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Room Playground</title>
+    <link rel="stylesheet" href="/src/play/play.css" />
+  </head>
+  <body>
+    <canvas id="scene" tabindex="0" aria-label="Room playground"></canvas>
+    <div id="loader"><div class="bar"><div class="fill"></div></div><p class="msg">Loading playground…</p></div>
+    <header id="play-toolbar" hidden>
+      <button id="pause">Pause <kbd>Esc</kbd></button>
+      <span id="room-name"></span>
+      <div class="camera-tools" role="group" aria-label="Play mode"><button data-play-view="fpv">First person</button><button data-play-view="playground">Overhead</button></div>
+      <div class="scoreboard"><span><b id="throws">0</b> throws</span><span><b id="knocked">0</b> knocked over</span></div>
+      <div class="camera-tools overhead-only" role="group" aria-label="Interaction tool">
+        <button data-tool="throw" aria-pressed="true">Throw</button><button data-tool="orbit" aria-pressed="false">Orbit</button><button data-tool="pan" aria-pressed="false">Pan</button>
+      </div>
+      <div class="camera-tools overhead-only" role="group" aria-label="Zoom"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button></div>
+      <button class="overhead-only" id="center-view" title="Center camera (Home)">Center view</button>
+      <button data-reset>Reset objects <kbd class="overhead-only">R</kbd></button>
+    </header>
+    <div id="crosshair" hidden aria-hidden="true"></div>
+    <div id="toast" role="status" hidden></div>
+    <div id="interaction" hidden><strong id="target-name"></strong><span id="action-hint"></span></div>
+    <div id="start" hidden>
+      <div class="card">
+        <p class="eyebrow">ROOM EXPLORER / PLAYGROUND</p>
+        <h1 id="menu-title">Click. Throw.</h1>
+        <p class="lead overhead-only">Point at an object and click to send it flying.</p>
+        <p class="lead fpv-only">Explore at eye level. Run between the furniture, jump, and pick up anything that catches your eye.</p>
+        <div class="essentials fpv-only"><div><kbd>W A S D</kbd><span>Move · mouse to look around</span></div><div><kbd>Shift / Space</kbd><span>Sprint / jump · C to crouch</span></div><div><kbd>Click / E</kbd><span>Click to throw · E to carry / drop</span></div></div>
+        <div class="essentials overhead-only">
+          <div><kbd>Click</kbd><span>Throw the object under your cursor</span></div>
+          <div><kbd>Right-drag</kbd><span>Pan around the room</span></div>
+          <div><kbd>Scroll</kbd><span>Zoom in and out</span></div>
+        </div>
+        <div class="settings">
+          <label for="play-quality">Graphics</label><select id="play-quality"><option value="auto">Auto · smoother play</option><option value="detail">Full detail</option></select>
+          <label for="room-select">Room</label><select id="room-select"></select>
+        </div>
+        <div class="mode-choice" role="group" aria-label="Play mode"><button data-play-view="fpv">First person</button><button data-play-view="playground">Overhead</button></div>
+        <p id="lock-error" role="alert"></p>
+        <button id="go" class="primary">Back to throwing</button>
+        <div class="secondary-actions"><button id="reset" data-reset>Reset objects</button><button id="mute" aria-pressed="false">Sound on</button></div>
+        <p class="game-note overhead-only">In Throw mode, click an object to throw it immediately. Drag in Orbit or Pan mode. Scroll or pinch to zoom. Alt + left-drag also orbits; right-drag, Shift-drag, or Shift-scroll pans. Arrow keys pan; + / − zoom. Home restores the original view. Knock other objects out of place to score. R resets the round; Esc pauses.</p>
+        <p class="game-note fpv-only">Click Enter room to capture your mouse. If mouse capture is unavailable, click objects directly and right-drag to look. Esc pauses. E picks up or drops what you’re holding (right-click also drops with mouse capture); scroll adjusts its distance. R returns you to the entrance. Reset objects starts the room over.</p>
+        <p class="back"><a href="/">← Back to the viewer</a></p>
+      </div>
+    </div>
+    <div id="stats" hidden></div>
+    <script type="module" src="/src/play/main.ts"></script>
+  </body>
+</html>

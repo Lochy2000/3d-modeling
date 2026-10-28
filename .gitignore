@@ -1,0 +1,41 @@
+# ---- Personal data: never commit (also enforced by .githooks/pre-commit → tools/check_private.py) ----
+captures/
+data/
+rooms/private/
+*.jpg
+*.jpeg
+*.png
+*.heic
+*.webp
+*.gif
+*.mp4
+*.mov
+*.ply
+*.glb
+*.gltf
+*.obj
+*.usdz
+*.f16
+*.f16z
+*.conf
+*.npy
+*.arworldmap
+*.zip
+# deliberately public images (screenshots of the invented example only) go here
+!docs/public/**
+
+# ---- Build output / tooling ----
+node_modules/
+dist/
+build/
+.env*
+apps/android-capture/local.properties
+apps/android-capture/.gradle/
+apps/android-capture/build/
+apps/android-capture/app/build/
+apps/android-capture/.idea/
+*.iml
+*.apk
+__pycache__/
+*.pyc
+.venv/

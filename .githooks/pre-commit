@@ -1,0 +1,5 @@
+#!/bin/sh
+# Blocks personal data (scans, photos, meshes, real-room models) from ever being committed.
+# Enabled per clone with:  git config core.hooksPath .githooks
+PY=$(command -v python3 || command -v python)
+exec "$PY" tools/check_private.py --staged

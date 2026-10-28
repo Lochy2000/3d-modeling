@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>DT Modeling</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="viewer-topbar">
+      <a class="brand" href="/" aria-label="DT Modeling home"><span class="brand-mark" aria-hidden="true">⌂</span> DT Modeling</a>
+      <output id="viewer-status" aria-live="polite">Loading room…</output>
+      <button id="controls-toggle" aria-expanded="false" aria-controls="sidebar">Controls</button>
+    </header>
+    <aside id="sidebar" aria-label="Room controls">
+      <div id="hud" hidden>
+        <section class="control-section">
+          <h2>Rooms <span class="section-note">Explore your space</span></h2>
+          <div class="buttons room-list" data-group="room" aria-label="Choose a room"></div>
+        </section>
+        <section class="control-section">
+          <h2>View</h2>
+          <div class="buttons mode-grid" data-group="mode" aria-label="Viewing mode">
+            <button data-mode="orbit" class="active" aria-pressed="true">Dollhouse</button>
+            <button data-mode="layout" aria-pressed="false">Layout</button>
+            <button data-mode="knolling" aria-pressed="false">Knolling</button>
+            <button data-mode="walk" aria-pressed="false">Walk around</button>
+          </div>
+        </section>
+        <section class="control-section source-section">
+          <h2>Source</h2>
+          <div class="buttons segmented" data-group="source" aria-label="Model source">
+            <button data-source="model" class="active" aria-pressed="true">Rebuilt</button>
+            <button data-source="scan" aria-pressed="false">Scan</button>
+            <button data-source="overlay" aria-pressed="false">Overlay</button>
+            <button data-source="wireframe" aria-pressed="false">Wireframe</button>
+          </div>
+        </section>
+        <section class="control-section" id="navigation" aria-label="Camera views">
+          <h2>Camera</h2>
+          <div class="camera-grid">
+            <button data-view="home" title="Reset view (Home or 1)">Home</button>
+            <button data-view="top" title="Top view (2)">Top</button>
+            <button data-view="front" title="Front view (3)">Front</button>
+            <button data-view="side" title="Side view (4)">Side</button>
+          </div>
+          <div class="zoom-control"><span>Zoom</span><button data-zoom="out" aria-label="Zoom out" title="Zoom out (−)">−</button><button data-zoom="in" aria-label="Zoom in" title="Zoom in (+)">+</button></div>
+          <div class="camera-location">
+            <h3>Camera location</h3>
+            <output id="camera-coordinates"></output>
+            <label for="camera-link">Link to this view</label>
+            <input id="camera-link" type="text" readonly spellcheck="false" aria-label="Link to restore this camera view">
+            <button id="copy-camera-link" type="button">Copy view link</button>
+            <span id="camera-copy-status" role="status"></span>
+            <p class="help">Save this link to return to the same position and angle.</p>
+          </div>
+        </section>
+        <section class="control-section quality-section">
+          <label class="quality-control" for="quality">Render quality</label>
+          <select id="quality" aria-label="Rendering quality"><option value="auto">Auto</option><option value="detail">Full detail</option><option value="fast">Fast</option></select>
+        </section>
+        <div class="sidebar-footer">
+          <button class="play-link" title="Walk around and grab / throw things (physics)">Enter playground <span aria-hidden="true">↗</span></button>
+          <p class="help" data-for="orbit">Drag to orbit · Scroll to zoom<br>Right-drag / two fingers to pan<br>Double-click to focus</p>
+          <p class="help" data-for="layout" hidden>Drag to pan · Scroll to zoom<br>Double-click to fit</p>
+          <p class="help" data-for="walk" hidden>Mouse to look · WASD to move<br>Shift to run · Esc to exit</p>
+        </div>
+      </div>
+    </aside>
+    <main id="viewport" aria-label="Room viewer">
+      <canvas id="scene"></canvas>
+      <section id="layout" hidden aria-label="Overhead room layout"></section>
+      <section id="knolling" hidden aria-label="Knolling arrangement"></section>
+
+      <div id="loader"><div class="bar"><div class="fill"></div></div><p>Loading… <span class="pct"></span></p></div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
