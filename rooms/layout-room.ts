@@ -27,6 +27,10 @@ export interface LayoutRoomOptions {
   /** folder URL of prepare_photos.py output (NNNN.jpg in layout.photos order) for photo comparisons */
   photoBase?: string;
   wallThickness?: number;
+  /** floor material (default: the palette's oak plank floor) */
+  floor?: THREE.Material;
+  /** add modeled geometry/lights on top of the measured baseline (placeholders for modeled objects can be removed here) */
+  decorate?(room: BuiltRoom, layout: ScanLayout): void | Promise<void>;
 }
 
 const v3 = (a: number[]) => new THREE.Vector3(a[0], a[1], a[2]);
@@ -89,7 +93,7 @@ async function buildLayoutRoom(o: LayoutRoomOptions): Promise<BuiltRoom> {
     return { def, group: buildWall(def, m) };
   });
 
-  const floor = flat(L.polygon, 0, m.woodFloor, true);
+  const floor = flat(L.polygon, 0, o.floor ?? m.woodFloor, true);
   floor.name = 'floor';
   const ceiling = flat(L.polygon, top, m.ceiling, false);
   ceiling.name = 'ceiling';
@@ -127,7 +131,7 @@ async function buildLayoutRoom(o: LayoutRoomOptions): Promise<BuiltRoom> {
   const span = Math.max(x1 - x0, z1 - z0);
   const inside = (x: number, z: number) => insidePolygon(L.polygon, x, z);
 
-  return {
+  const built: BuiltRoom = {
     layout,
     group,
     lights,
@@ -142,9 +146,14 @@ async function buildLayoutRoom(o: LayoutRoomOptions): Promise<BuiltRoom> {
     loadReference: async onProgress => {
       if (!o.referenceUrl) throw new Error('No reference scan configured for this room.');
       const gltf = await new GLTFLoader().loadAsync(o.referenceUrl, e => onProgress?.(e.total ? e.loaded / e.total : 0));
+      // reconstruct_bundle.py bakes photo colors into vertices and writes no material; show them unlit
+      const baked = new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide });
+      gltf.scene.traverse(obj => { if (obj instanceof THREE.Mesh) obj.material = baked; });
       return gltf.scene;
     },
     optimize: opts => batchStatic(group, [...walls.map(w => w.group), ceiling], { mergeDynamic: !!opts?.static }),
     photos,
   };
+  await o.decorate?.(built, L);
+  return built;
 }
